@@ -1,4 +1,4 @@
-# finAI
+# finAI - financial report analysis with ai
 
 It is using locally tuned LLM so you might need it is around 300 mb.
 
