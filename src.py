@@ -7,10 +7,26 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# List of key financial terms
 FINANCIAL_TERMS = {
-    "Total Revenue", "Net Income", "EBITDA", "Operating Income", 
-    "Gross Profit", "Cost Of Revenue", "Tax Provision", "Total Expenses"
+    # General Financials
+    "Total Revenue", "Operating Revenue", "Gross Profit", "Cost of Revenue", "Operating Expenses", 
+    "EBITDA", "Net Income from Continuing Operations", "Normalized EBITDA", "Total Unusual Items", 
+    "Tax Rate for Calculations", "Tax Effect of Unusual Items", "Reconciled Cost of Revenue",
+    "Reconciled Depreciation", "Research and Development (R&D) Expense", "Selling, General, and Administrative (SG&A) Expenses", 
+    "General and Administrative Expense", "Selling and Marketing Expense", "Rent and Landing Fees",
+    
+    # Balance Sheet
+    "Total Assets", "Total Liabilities", "Total Equity", "Cash and Equivalents", "Accounts Receivable", 
+    "Inventory", "Property, Plant & Equipment (PP&E)", "Total Debt", "Current Liabilities", "Current Assets", 
+    "Long-Term Debt", "Short-Term Debt", "Retained Earnings", "Shareholders’ Equity", 
+    
+    # Cash Flow Statement
+    "Operating Cash Flow", "Investing Cash Flow", "Financing Cash Flow", "Capital Expenditures", "Free Cash Flow", 
+    "Depreciation & Amortization", "Stock-Based Compensation", "Change in Working Capital",
+    
+    # Key Statistics
+    "Earnings Per Share (EPS)", "Price-to-Earnings Ratio (P/E)", "Return on Assets (ROA)", "Return on Equity (ROE)",
+    "Debt-to-Equity Ratio", "Current Ratio", "Quick Ratio", "Dividend Yield"
 }
 
 DATE_PATTERNS = [
