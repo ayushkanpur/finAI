@@ -52,8 +52,8 @@ def extract_data(uploaded_file):
         general_text = extract_general_text(df)
         return df, financial_data, general_text
 
-    elif file_type == "pdf":
-        pdf_text = extract_text_from_pdf(uploaded_file)
+    elif file_type in ["pdf", "txt"]:
+        pdf_text = extract_text_from_pdf(uploaded_file, file_type)
         financial_data = filter_financial_text(pdf_text)
         general_text = extract_general_text_from_text(pdf_text)
         return None, financial_data, general_text
@@ -62,11 +62,13 @@ def extract_data(uploaded_file):
         st.error("Unsupported file format. Please upload an Excel (.xlsx) or PDF file.")
         return None, None, None
 
-def extract_text_from_pdf(pdf_file):
-    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
-    text = ""
-    for page in doc:
-        text += page.get_text("text") + "\n"
+def extract_text_from_pdf(pdf_file, file_type):
+    """Extract text from PDF or TXT file."""
+    if file_type == "pdf":
+        doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+        text = "\n".join([page.get_text("text") for page in doc])
+    elif file_type == "txt":
+        text = pdf_file.read().decode("utf-8")
     return text
 
 def filter_financial_data(df):
@@ -114,7 +116,7 @@ def generate_response(model, tokenizer, financial_data, general_text, user_query
     context_text = ""
 
     if include_story and general_text:
-        context_text += f"General Story:\n{general_text[:2000]}...\n\n"
+        context_text += f"General Story:\n{general_text[:10000]}...\n\n"
 
     if financial_data:
         financial_context = "\n".join([f"{key}: {', '.join(map(str, values))}" for key, values in financial_data.items()])
@@ -170,7 +172,7 @@ def main():
     st.markdown("Upload a financial report (.xlsx or .pdf) and chat with AI about it.")
 
     tokenizer, model = load_model()
-    uploaded_file = st.file_uploader("Choose a file", type=['xlsx', 'pdf'])
+    uploaded_file = st.file_uploader("Choose a file", type=['xlsx', 'pdf', 'txt'])
     include_story = st.checkbox("Analyze Story (Include General Text)")
 
     if uploaded_file:
